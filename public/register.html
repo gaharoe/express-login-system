@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tailwind.css">
+    <title>Login</title>
+</head>
+<body>
+    <main class="w-svw h-svh flex justify-center items-center">
+        <div>
+            <h1 class="mb-10 font-bold text-xl text-center">CookiesPaw</h1>
+            <form id="login-form" class="w-60 flex flex-col gap-5">
+                <div class="relative w-full">
+                    <input type="text" id="nama" placeholder=" " class="peer w-full rounded-lg border border-gray-300 bg-transparent h-10 px-3 text-sm focus:border-blue-500 focus:outline-none"/>
+                    <label for="nama" class=" pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 bg-white px-1 text-sm text-gray-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-xs">
+                        Nama Lengkap
+                    </label>
+                </div>
+                <div class="relative w-full">
+                    <input type="text" id="username" placeholder=" " class="peer w-full rounded-lg border border-gray-300 bg-transparent h-10 px-3 text-sm focus:border-blue-500 focus:outline-none"/>
+                    <label for="username" class=" pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 bg-white px-1 text-sm text-gray-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-xs">
+                        Username
+                    </label>
+                </div>
+                <div class="relative w-full flex rounded-lg border border-gray-300">
+                    <input type="password" id="password" placeholder=" " class="peer flex-1  bg-transparent h-10 px-3 text-sm focus:border-blue-500 focus:outline-none"/>
+                    <label for="password" class=" pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 bg-white px-1 text-sm text-gray-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-xs">
+                        Password
+                    </label>
+                    <button onclick="showPassword()" type="button" class="text-sm text-gray-700 pr-3">show</button>
+                </div>
+                <button class="h-10 rounded-lg bg-pink-600 text-white border-2 border-white/50">Daftar</button>
+                <p class="text-sm text-center">Sudah punya akun? <a href="/" class="text-blue-600 underline">Login</a></p>
+            </form>
+        </div>
+    </main>
+
+    <script src="./sweetalert.js"></script>
+    <script>
+        const loginForm = document.getElementById("login-form")
+
+        loginForm.addEventListener("submit", async e => {
+            e.preventDefault()
+            const nama = document.getElementById("nama").value
+            const username = document.getElementById("username").value
+            const password = document.getElementById("password").value
+            const errors = [
+                `Username ${username} tidak tersedia`,
+                "Daftar gagal"
+            ]
+            if(!password || !username || !username) {
+                Swal.fire({
+                    icon: "error",
+                    text: "Isi data dengan lengkap",
+                    timer: 2000,
+                    showConfirmButton: false
+                })
+                return
+            } 
+            try {
+                console.log({username, password})
+                const req = await fetch("/api/register", {method: "POST", headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username, password, nama})})
+                const res = await req.json()
+                if(res.error){
+                    Swal.fire({
+                        icon: "error",
+                        text: errors[res.error - 1],
+                        timer: 2000,
+                        showConfirmButton: false
+                    })
+                    return
+                }
+                Swal.fire({
+                    icon: "success",
+                    text: "Daftar berhasil",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then((result) => {
+                    location.href = "/"
+                })               
+            } catch (err){
+                Swal.fire({
+                    icon: "error",
+                    text: "Server Bermasalah",
+                    timer: 2000,
+                    showConfirmButton: false
+                })
+            }
+        })
+
+        function showPassword(){
+            const pwdInput = document.getElementById("password")
+            if(pwdInput.type == "text"){
+                pwdInput.type = "password"
+            } else {
+                pwdInput.type = "text"
+            }
+        }
+        
+
+    </script>
+</body>
+</html>
