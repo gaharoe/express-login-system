@@ -28,8 +28,8 @@ app.post("/api/login", login, (req, res) => {
     res.cookie("token", req.token, {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
+        sameSite: "lax",
         path: "/",
-        secure: true
     })
     res.json({error: null})
 })

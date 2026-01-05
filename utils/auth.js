@@ -12,7 +12,6 @@ export function login(req, res, next){
         return
     }
     const token = jwt.sign({nama: user.nama, username: user.username}, jwtSecret, {expiresIn: "1d"})
-    console.log(token)
     req.user = user
     req.token = token
     next()
