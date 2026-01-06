@@ -38,13 +38,13 @@ export function auth(req, res, next){
 }
 
 export function register(req, res, next){
-    const {username, password, nama} = req.body
+    const {username, nama} = req.body
     const user = users.find(data => data.username == username)
     if(user){
         res.json({error: 1})
         return
     }
-    users.push({username, password, nama})
+    users.push({username, nama})
     fs.writeFileSync("./data/users.json", JSON.stringify(users))
     next()
 }
