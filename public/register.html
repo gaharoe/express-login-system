@@ -24,12 +24,6 @@
                     </label>
                 </div>
 <p class="hidden text-xs" id="email-warn">Email tidak valid</p>
-                <div class="relative w-full flex rounded-lg border border-gray-300">
-                    <input type="password" id="password" placeholder=" " class="peer flex-1  bg-transparent h-10 px-3 text-sm focus:border-blue-500 focus:outline-none"/>
-                    <label for="password" class=" pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 bg-white px-1 text-sm text-gray-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-blue-500 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-xs">
-                        Password
-                    </label>
-                    <button onclick="showPassword()" type="button" class="text-sm text-gray-700 pr-3">show</button>
                 </div>
                 <button class="h-10 rounded-lg bg-pink-600 text-white border-2 border-white/50">Daftar</button>
                 <p class="text-sm text-center">Sudah punya akun? <a href="/" class="text-blue-600 underline">Login</a></p>
@@ -45,12 +39,11 @@
             e.preventDefault()
             const nama = document.getElementById("nama").value
             const username = document.getElementById("username").value
-            const password = document.getElementById("password").value
             const errors = [
                 `Username ${username} tidak tersedia`,
                 "Daftar gagal"
             ]
-            if(!password || !username || !username) {
+            if(!nama || !username) {
                 Swal.fire({
                     icon: "error",
                     text: "Isi data dengan lengkap",
@@ -62,13 +55,12 @@
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   
   // The test() method returns true if the email matches the pattern, false otherwise
-  if (!regex.test(email)){
+  if (!regex.test(username)){
      document.getElementById("email-warn").classList.remove("hidden")
 return
 }
             try {
-                console.log({username, password})
-                const req = await fetch("/api/register", {method: "POST", headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username, password, nama})})
+                const req = await fetch("/api/register", {method: "POST", headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username, nama})})
                 const res = await req.json()
                 if(res.error){
                     Swal.fire({
