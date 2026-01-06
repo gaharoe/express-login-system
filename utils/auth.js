@@ -5,8 +5,8 @@ const users = JSON.parse(fs.readFileSync("./data/users.json"))
 const jwtSecret = "my name lala"
 
 export function login(req, res, next){
-    const {username, password} = req.body
-    const user = users.find(data => data.username == username && data.password == password)
+    const {username, nama} = req.body
+    const user = users.find(data => data.username == username && data.nama == nama)
     if(!user){
         res.json({error: 1})
         return
